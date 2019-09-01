@@ -11,16 +11,29 @@ dataset = pd.read_csv('Restaurant_Reviews.tsv', delimiter = '\t', quoting = 3)
 # Cleaning the texts
 import re
 import nltk
+
+# for downloading stopwords 
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 corpus = []
 for i in range(0, 1000):
+    # removing everything(like punctuations) other than english letters and replacing the removed items by space
     review = re.sub('[^a-zA-Z]', ' ', dataset['Review'][i])
+    
+    # converting all characters into lower case
     review = review.lower()
+    
+    #converting a sentence into a list where each word is an element of the list
     review = review.split()
+    
+    # changes similar words to a single word. "loved","loving","love" will be changed to "love"
     ps = PorterStemmer()
+    
+    # removing irrelevant words(stopwords) like "this","that","the" etc
     review = [ps.stem(word) for word in review if not word in set(stopwords.words('english'))]
+    
+    #reconstructing the revievs from array back into a sentence
     review = ' '.join(review)
     corpus.append(review)
 
